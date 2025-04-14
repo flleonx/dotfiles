@@ -27,6 +27,13 @@ vim.keymap.set('v', '>', '>gv', { noremap = true, silent = true })
 vim.keymap.set('n', '<leader>vd', vim.diagnostic.open_float, { noremap = true, silent = true })
 
 if os.getenv 'SHELL' ~= '/bin/zsh' then
+  local function paste()
+    return {
+      vim.fn.split(vim.fn.getreg '', '\n'),
+      vim.fn.getregtype '',
+    }
+  end
+
   vim.g.clipboard = {
     name = 'OSC 52',
     copy = {
@@ -34,8 +41,8 @@ if os.getenv 'SHELL' ~= '/bin/zsh' then
       ['*'] = require('vim.ui.clipboard.osc52').copy '*',
     },
     paste = {
-      ['+'] = function() end,
-      ['*'] = function() end,
+      ['+'] = paste,
+      ['*'] = paste,
     },
   }
 end
@@ -45,7 +52,7 @@ return {
     'sainnhe/gruvbox-material',
     priority = 1000,
     config = function()
-      vim.api.nvim_set_option_value('background', 'dark', {})
+      vim.api.nvim_set_option_value('background', 'light', {})
       vim.cmd.colorscheme 'gruvbox-material'
     end,
   },
@@ -101,6 +108,8 @@ return {
     config = function()
       require('lint').linters_by_ft = {
         go = { 'golangcilint' },
+        json = { 'jsonlint' },
+        yaml = { 'yamllint' },
       }
       vim.api.nvim_create_autocmd({ 'BufWritePost' }, {
         callback = function()
