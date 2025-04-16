@@ -245,4 +245,5 @@ return {
       require('dap-go').setup {}
     end,
   },
+  { 'vim-test/vim-test' },
 }

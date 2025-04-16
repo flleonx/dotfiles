@@ -10,8 +10,11 @@ ln -sf /dotfiles/.tmux.conf "$HOME"/.tmux.conf
 locale-gen en_US.UTF-8
 
 curl https://mise.run | sh
-"$HOME"/.local/bin/mise use -g neovim starship go golangci-lint@v1.64.8 node ripgrep fzf zoxide lazygit jq
+mise use -g neovim starship go golangci-lint node ripgrep fzf zoxide lazygit jq python
 
-"$HOME"/.local/bin/mise exec go@latest -- go install github.com/go-delve/delve/cmd/dlv@latest
-"$HOME"/.local/bin/mise exec nvim@latest -- nvim "+Lazy! install" +MasonToolsInstallSync +q!
+go install github.com/x/tools/gopls@latest
+go install github.com/x/tools/goimports@latest
+go install github.com/go-delve/delve/cmd/dlv@latest
+
+mise reshim
 
