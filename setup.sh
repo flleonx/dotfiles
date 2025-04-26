@@ -10,7 +10,7 @@ ln -sf /dotfiles/.tmux.conf "$HOME"/.tmux.conf
 locale-gen en_US.UTF-8
 
 curl https://mise.run | sh
-mise use -g neovim starship go golangci-lint@v1.64.8 node ripgrep fzf zoxide lazygit jq python gofumpt
+mise use -g neovim starship go golangci-lint node ripgrep fzf zoxide lazygit jq python gofumpt bat
 
 go install golang.org/x/tools/gopls@latest
 go install golang.org/x/tools/cmd/goimports@latest
