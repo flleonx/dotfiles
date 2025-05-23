@@ -26,34 +26,20 @@ vim.keymap.set('v', '>', '>gv', { noremap = true, silent = true })
 
 vim.keymap.set('n', '<leader>vd', vim.diagnostic.open_float, { noremap = true, silent = true })
 
-if os.getenv 'SHELL' ~= '/bin/zsh' then
-  local function paste()
-    return {
-      vim.fn.split(vim.fn.getreg '', '\n'),
-      vim.fn.getregtype '',
-    }
-  end
-
-  vim.g.clipboard = {
-    name = 'OSC 52',
-    copy = {
-      ['+'] = require('vim.ui.clipboard.osc52').copy '+',
-      ['*'] = require('vim.ui.clipboard.osc52').copy '*',
-    },
-    paste = {
-      ['+'] = paste,
-      ['*'] = paste,
-    },
-  }
-end
-
 return {
   {
-    'sainnhe/gruvbox-material',
+    'webhooked/kanso.nvim',
+    lazy = false,
     priority = 1000,
     config = function()
-      vim.api.nvim_set_option_value('background', 'light', {})
-      vim.cmd.colorscheme 'gruvbox-material'
+      -- vim.api.nvim_set_option_value('background', 'light', {})
+      require('kanso').setup {
+        background = { -- map the value of 'background' option to a theme
+          dark = 'ink', -- try "ink" !
+          light = 'pearl',
+        },
+      }
+      vim.cmd.colorscheme 'kanso'
     end,
   },
   {
