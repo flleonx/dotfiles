@@ -4,15 +4,15 @@
 -- See the kickstart.nvim README for more information
 vim.o.termguicolors = true
 
-vim.opt.swapfile = false
-vim.opt.wrap = false
+vim.o.swapfile = false
+vim.o.wrap = false
 
-vim.opt.scrolloff = 7
+vim.o.scrolloff = 7
 
-vim.opt.ph = 15
+vim.o.ph = 15
 
-vim.opt.cursorcolumn = false
-vim.opt.cursorline = false
+vim.o.cursorcolumn = false
+vim.o.cursorline = false
 
 vim.keymap.set('n', ',w', ':w<CR>', { desc = 'Save buffer' })
 vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv", { noremap = true, silent = true })
@@ -38,6 +38,8 @@ return {
           dark = 'ink', -- try "ink" !
           light = 'pearl',
         },
+        commentStyle = { italic = false },
+        keywordStyle = { italic = false },
       }
       vim.cmd.colorscheme 'kanso'
     end,
@@ -114,7 +116,6 @@ return {
       'nvim-neotest/nvim-nio',
 
       -- Installs the debug adapters for you
-      'williamboman/mason.nvim',
       'jay-babu/mason-nvim-dap.nvim',
 
       -- Add your own debuggers here
