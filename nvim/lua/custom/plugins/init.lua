@@ -18,8 +18,8 @@ vim.keymap.set('n', ',w', ':w<CR>', { desc = 'Save buffer' })
 vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv", { noremap = true, silent = true })
 vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv", { noremap = true, silent = true })
 
-vim.keymap.set('n', '<leader>bc', ':bwipeout<CR>', { noremap = true, silent = true })
-vim.keymap.set('n', '<leader>bd', ':%bd|e#|bd#<cr>|\'"<CR>', { noremap = true, silent = true })
+vim.keymap.set('n', '<leader>bc', ':lua MiniBufremove.wipeout()<CR>', { noremap = true, silent = true })
+vim.keymap.set('n', '<leader>bd', ':bufdo lua MiniBufremove.wipeout()<CR>', { noremap = true, silent = true })
 
 vim.keymap.set('v', '<', '<gv', { noremap = true, silent = true })
 vim.keymap.set('v', '>', '>gv', { noremap = true, silent = true })
@@ -32,7 +32,7 @@ return {
     lazy = false,
     priority = 1000,
     config = function()
-      -- vim.api.nvim_set_option_value('background', 'light', {})
+      vim.api.nvim_set_option_value('background', 'light', {})
       require('kanso').setup {
         background = { -- map the value of 'background' option to a theme
           dark = 'ink', -- try "ink" !
