@@ -28,20 +28,12 @@ vim.keymap.set('n', '<leader>vd', vim.diagnostic.open_float, { noremap = true, s
 
 return {
   {
-    'webhooked/kanso.nvim',
+    'sainnhe/gruvbox-material',
     lazy = false,
     priority = 1000,
     config = function()
-      vim.api.nvim_set_option_value('background', 'light', {})
-      require('kanso').setup {
-        background = { -- map the value of 'background' option to a theme
-          dark = 'ink', -- try "ink" !
-          light = 'pearl',
-        },
-        commentStyle = { italic = false },
-        keywordStyle = { italic = false },
-      }
-      vim.cmd.colorscheme 'kanso'
+      vim.api.nvim_set_option_value('background', 'dark', {})
+      vim.cmd.colorscheme 'gruvbox-material'
     end,
   },
   {
@@ -233,4 +225,5 @@ return {
     end,
   },
   { 'vim-test/vim-test' },
+  { 'Bekaboo/dropbar.nvim' },
 }
