@@ -17,43 +17,31 @@ vim.opt.cursorline = false
 vim.keymap.set('n', ',w', ':w<CR>', { desc = 'Save buffer' })
 vim.keymap.set('v', 'J', ":m '>+1<CR>gv=gv", { noremap = true, silent = true })
 vim.keymap.set('v', 'K', ":m '<-2<CR>gv=gv", { noremap = true, silent = true })
-
-vim.keymap.set('n', '<leader>bc', ':bwipeout<CR>', { noremap = true, silent = true })
-vim.keymap.set('n', '<leader>bd', ':%bd|e#|bd#<cr>|\'"<CR>', { noremap = true, silent = true })
+vim.keymap.set('n', '<leader>bc', ':lua MiniBufremove.wipeout()<CR>', { noremap = true, silent = true })
+vim.keymap.set('n', '<leader>bd', ':bufdo lua MiniBufremove.wipeout()<CR>', { noremap = true, silent = true })
 
 vim.keymap.set('v', '<', '<gv', { noremap = true, silent = true })
 vim.keymap.set('v', '>', '>gv', { noremap = true, silent = true })
 
 vim.keymap.set('n', '<leader>vd', vim.diagnostic.open_float, { noremap = true, silent = true })
 
-if os.getenv 'SHELL' ~= '/bin/zsh' then
-  local function paste()
-    return {
-      vim.fn.split(vim.fn.getreg '', '\n'),
-      vim.fn.getregtype '',
-    }
-  end
-
-  vim.g.clipboard = {
-    name = 'OSC 52',
-    copy = {
-      ['+'] = require('vim.ui.clipboard.osc52').copy '+',
-      ['*'] = require('vim.ui.clipboard.osc52').copy '*',
-    },
-    paste = {
-      ['+'] = paste,
-      ['*'] = paste,
-    },
-  }
-end
-
 return {
   {
-    'sainnhe/gruvbox-material',
+    'webhooked/kanso.nvim',
+    lazy = false,
     priority = 1000,
     config = function()
-      vim.api.nvim_set_option_value('background', 'light', {})
-      vim.cmd.colorscheme 'gruvbox-material'
+      vim.api.nvim_set_option_value('background', 'dark', {})
+      require('kanso').setup {
+        background = { -- map the value of 'background' option to a theme
+          dark = 'mist', -- try "zen", "mist" or "pearl" !
+          light = 'pearl', -- try "zen", "mist" or "pearl" !
+        },
+        foreground = 'default', -- "default" or "saturated" (can also be a table like background)
+      }
+
+      -- setup must be called before loading
+      vim.cmd.colorscheme 'kanso'
     end,
   },
   {
@@ -210,6 +198,10 @@ return {
       },
     },
     config = function()
+      vim.cmd 'hi DapBreakpointColor guifg=#fa4848'
+      vim.fn.sign_define('DapBreakpoint', { text = '', texthl = 'DapBreakpointColor', linehl = '', numhl = '' })
+      vim.cmd 'hi DapBreakpointRejectedColor guifg=#48c848'
+      vim.fn.sign_define('DapBreakpointRejected', { text = '', texthl = 'DapBreakpointRejectedColor', linehl = '', numhl = '' })
       local dap = require 'dap'
       local dapui = require 'dapui'
 
@@ -243,7 +235,28 @@ return {
 
       -- Install golang specific config
       require('dap-go').setup {}
+      dap.adapters.lldb = {
+        type = 'executable',
+        -- absolute path is important here, otherwise the argument in the `runInTerminal` request will default to $CWD/lldb-vscode
+        command = '/Library/Developer/CommandLineTools/usr/bin/lldb-dap',
+        name = 'lldb',
+      }
+      dap.configurations.c = {
+        {
+          name = 'Launch',
+          type = 'lldb',
+          request = 'launch',
+          program = function()
+            return vim.fn.input('Path to executable: ', vim.fn.getcwd() .. '/', 'file')
+          end,
+          cwd = '${workspaceFolder}',
+          stopOnEntry = false,
+          args = {},
+          -- runInTerminal = true,
+        },
+      }
     end,
   },
   { 'vim-test/vim-test' },
+  { 'Bekaboo/dropbar.nvim' },
 }
